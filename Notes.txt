@@ -1,0 +1,29 @@
+1. Create Git repo name mlproject
+
+2. Create Folder mlproject on local desktop
+
+3. Open VS code inside local folder
+
+4. Create Environment: conda create -p venv python==3.8 -y =>this will create a venv folder inside mlproject in vs code
+
+5. Activate the enviromemt: conda activate C:\Users\patel\OneDrive\Desktop\GradesDetectionUsingML\venv
+
+	(base) C:\Users\patel\OneDrive\Desktop\GradesDetectionUsingML\venv>   conda activate C:\Users\patel\OneDrive\Desktop\GradesDetectionUsingML\venv
+
+	(C:\Users\patel\OneDrive\Desktop\GradesDetectionUsingML\venv) C:\Users\patel\OneDrive\Desktop\GradesDetectionUsingML\venv>
+
+6. Now its time to push everything in git, but first create a README.MD file
+	-> git init (initialize git)
+	-> git add README.MD (add file to git)
+	-> git commit -m "FirstCommit"(Commit the changes, success to adding files)
+	-> git status(to check thee branch we are on, by deafult it is master)
+	-> git branch -M main(select branch)
+	-> git remote add origin https://github.com/RiddhiPatel1591/GradesDetectionUsingML.git(cpnnect with git repository)
+	-> git push -u origin main (Finally push)
+
+	you can check your git account using :git config --global user.email
+
+7. Create a .gitignore file in Python on GITHUB Repo itself and then pull the changes to our local vs code
+	-> git pull 
+
+8. Create setup.py(reposnible for creating this ML application as a package, anybody can install this package example:seaborn and use it, also alows to deploys in PI PI) and requirementx.txt(has all the packages) in vs code
