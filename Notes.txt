@@ -4,6 +4,8 @@
 
 3. Open VS code inside local folder
 
+		---CREATE ENVIROMENT---
+
 4. Create Environment: conda create -p venv python==3.8 -y =>this will create a venv folder inside mlproject in vs code
 
 5. Activate the enviromemt: conda activate C:\Users\patel\OneDrive\Desktop\GradesDetectionUsingML\venv
@@ -26,4 +28,80 @@
 7. Create a .gitignore file in Python on GITHUB Repo itself and then pull the changes to our local vs code
 	-> git pull 
 
+		--CREATE REQUIREMENT.TXT FOR INSTALLATION OF ALL PACAKAGES--
+
 8. Create setup.py(reposnible for creating this ML application as a package, anybody can install this package example:seaborn and use it, also alows to deploys in PI PI) and requirementx.txt(has all the packages) in vs code
+
+9. setup.py will find all the pacakages used in entire project directory using 'find_packages'
+	->from setuptools import find_packages, setup
+	setup(
+    		name='GradesDetectionUsingML',
+    		version='0.0.1',
+    		author='Riddhi',
+    		author_email='patelriddhi1591@gmail.com',
+    		packages=find_packages(),
+    		install_requires=['pandas','numpy','seaborn']
+    	)
+
+10.now, how will this find_packages find the package? for that we have to create a new folder 'src' and create '__init__' indise src. When setup.py is ran,        it will search for folders with '__init__.py' folder and then it will conside 'src' as a package and build it. Then we can use this package just like pandas and numpy packages 
+
+11. Now we will create our entire project inside src and if needed, we will create a folder inside src so that it will also be included in that package
+
+12. 'install_requires=['pandas','numpy','seaborn']' it is not possible for us to include all the pacakges in this line, so, we will create a function 'get_requirements' which will take all the packages from 'requirement.txt' file and run requirement.txt everytime
+	->def get_requirements(file_path:str)->List[str]:
+    		requirements=[]
+    		with open(file_path) as file_obj:
+        		requirements=file_obj.readlines()
+        		requirements=[req.replace("\n","") for req in requirements]
+        		if "-e ." in requirements:
+            			requirements.remove("-e .")
+    		return requirements
+
+	->install_requires=get_requirements('C:\Users\patel\OneDrive\Desktop\GradesDetectionUsingML\requirements.txt')
+
+	--Information--
+		-> We had to eliminate \n since it was getting added to 'requirements' list every time
+		-> since we are running 'requirement.txt' file we have to connect it with 'setup.py', hence we use'-e .' at the end of txt file so that it 		will automaticlly run 'setup.py' file when ever we run 'pip install -r requirements.txt'
+
+13. Now its time to push it in git
+	-> git add .
+	-> git commit -m "setup"
+	-> git push -u origin main
+
+			---COMPONENTS AND PIPELINE---
+
+14. create a new folder in src, 'components' which has 4 new file, '__init__', 'data_injection', 'data_transformation' and 'model trainer'
+
+15. create a new folder in src, name 'pipeline' which has 3 new file, '__init__', 'train_pipeline' and 'predict_pipeline'
+
+16. create 3 new files in src, 'logger.py', 'exception.py' and 'utils.py'
+
+17. write code for exception and log it.
+ 
+			---LOAD DATA AND DO EDA---
+18. create a new folder 'notebook' and create a new folder inside it 'data' and load stud.csv file in it. create a 'eda.IPYNB' file in notebook folder anddo all the necessary eda
+
+			---MODEL TRAINING---
+18. create a 'model_training.IPYNB' file in notebook folder
+	->import all libraries
+	->create independent variable (X) and dependent variable (Y): Y is something we want to predict i.e. math score and rest all column in X
+	->now we have to make chnages to X, X has numeric and caterogic value, for categoric value we will use OneHotEncoding so that it can convert it to n	numbers and for numeric value we will use StandaerScaler() so that it can bring all the values in one scale.
+	-> We use ColumnTrsnformer and then apply OneHotEncoding and then StandaerScaler
+		preprocessor = ColumnTransformer(
+    				[
+        				("OneHotEncoder", OneHotEncoder(), cat_features),
+         				("StandardScaler", StandardScaler(), num_features),        
+    				]
+				)
+	-> then we do fit_transform for X
+		X = preprocessor.fit_transform(X)
+	-> now train test split
+	-> Create a func 'evaluate_model' just to find mean squared error, mean absoult error and r2 error
+	-> Crete a dic with alllll the models you wnat to train and then use for look to access each model which will first:
+		1. model.fit(X_train, y_train) this will only train the model with x train and y train
+		2.     y_train_pred = model.predict(X_train) predict y value for x train
+    		       y_test_pred = model.predict(X_test) predict y value for x test
+		3. model_train_mae , model_train_rmse, model_train_r2 = evaluate_model(y_train, y_train_pred) for train
+		   model_test_mae , model_test_rmse, model_test_r2 = evaluate_model(y_test, y_test_pred) for test
+		4. select model with best r2 score
+
