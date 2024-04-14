@@ -105,3 +105,11 @@
 		   model_test_mae , model_test_rmse, model_test_r2 = evaluate_model(y_test, y_test_pred) for test
 		4. select model with best r2 score
 
+			---DATA INGESTION---
+19. read data, split it to train and test, and save it again in 'artifacts' folder as 'train.csv','test.csv' and 'data.csv'
+
+			---DATA TRANSFORMATION---
+20. clean data, split data apply simpleimputer, onehotencoder and standarscaler tranformand clean data and return train and test data, also save a pkl file
+
+			---MODEL TRAINER---
+21. Hyper parameter tuning
